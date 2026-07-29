@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Аглаг Зам — Гэр бүлийн амралт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Petrona:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:        #1B2A4A;
+    --navy-light:  #3B5580;
+    --gold:        #F0A93C;
+    --green:       #4C7A3D;
+    --cream:       #F7F3E9;
+    --ink:         #1A1F1C;
+    --white:       #FFFDF8;
+    --radius: 10px;
+    --container: 1160px;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:'Mulish', sans-serif;
+    color:var(--ink);
+    background:var(--cream);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{ font-family:'Petrona', serif; font-weight:600; line-height:1.15; letter-spacing:-0.01em; }
+  a{ color:inherit; text-decoration:none; }
+  img{ display:block; max-width:100%; }
+  .container{ max-width:var(--container); margin:0 auto; padding:0 32px; }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:3px solid var(--gold); outline-offset:3px;
+  }
+
+  /* ---------- FAIRY LIGHT SIGNATURE ---------- */
+  @keyframes glow-pulse{
+    0%,100%{ opacity:0.65; filter:blur(0.5px); }
+    50%{ opacity:1; filter:blur(0px); }
+  }
+  .light-strand{ display:flex; align-items:center; justify-content:center; gap:22px; }
+  .light-strand .bulb{
+    width:9px; height:9px; border-radius:50%; background:var(--gold);
+    box-shadow:0 0 10px 3px rgba(240,169,60,0.65);
+    animation: glow-pulse 3.4s ease-in-out infinite;
+  }
+  .light-strand .bulb:nth-child(2n){ animation-delay:0.5s; }
+  .light-strand .bulb:nth-child(3n){ animation-delay:1.1s; }
+  @media (prefers-reduced-motion: reduce){ .bulb{ animation:none; opacity:0.9; } }
+
+  .divider{ margin:0 auto 44px; width:fit-content; }
+
+  /* ---------- NAV ---------- */
+  .nav{ position:fixed; top:0; left:0; right:0; z-index:100; padding:18px 0; transition: background .35s ease, padding .35s ease, box-shadow .35s ease; }
+  .nav.scrolled{ background:rgba(255,253,248,0.95); backdrop-filter: blur(6px); padding:10px 0; box-shadow:0 1px 0 rgba(26,31,28,0.1); }
+  .nav .container{ display:flex; align-items:center; justify-content:space-between; position:relative; }
+  .brand{ display:flex; flex-direction:column; line-height:1.15; }
+  .brand .l1{ font-family:'Petrona', serif; font-weight:700; font-size:1.25rem; color:var(--white); transition:color .35s ease; }
+  .nav.scrolled .brand .l1{ color:var(--navy); }
+  .brand .l2{ font-size:0.68rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); font-weight:700; }
+
+  .nav-links{ display:flex; gap:28px; list-style:none; }
+  .nav-links a{ font-size:0.88rem; font-weight:700; color:var(--white); opacity:0.92; transition:color .35s ease; }
+  .nav.scrolled .nav-links a{ color:var(--ink); }
+  .nav-links a:hover{ text-decoration:underline; text-underline-offset:4px; }
+
+  .nav-toggle{ display:none; width:40px; height:40px; border:none; background:transparent; cursor:pointer; flex-direction:column; align-items:center; justify-content:center; gap:5px; }
+  .nav-toggle span{ display:block; width:24px; height:2px; background:var(--white); transition:.3s; }
+  .nav.scrolled .nav-toggle span{ background:var(--ink); }
+  .nav-toggle.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+  .nav-toggle.open span:nth-child(2){ opacity:0; }
+  .nav-toggle.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+  @media (max-width:780px){
+    .nav-toggle{ display:flex; }
+    .nav-links{ display:flex; flex-direction:column; gap:0; position:absolute; top:100%; left:0; right:0; background:var(--white);
+      box-shadow:0 12px 24px rgba(26,31,28,0.15); max-height:0; overflow:hidden; transition:max-height .3s ease; }
+    .nav-links.open{ max-height:500px; }
+    .nav-links a{ display:block; padding:16px 24px; color:var(--ink) !important; border-bottom:1px solid rgba(26,31,28,0.08); }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:flex-end; overflow:hidden;
+    background:
+      linear-gradient(180deg, rgba(11,17,34,0.25) 0%, rgba(11,17,34,0.55) 55%, rgba(11,17,34,0.92) 100%),
+      url('night-view.jpg') center 35% / cover no-repeat;
+  }
+  .hero-lights{ position:absolute; top:8%; left:0; right:0; opacity:0.9; }
+  .hero-content{ position:relative; z-index:2; color:var(--white); padding:60px 0 80px; max-width:700px; }
+  .eyebrow{ font-size:0.82rem; font-weight:800; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold); margin-bottom:18px; display:block; }
+  .hero h1{ font-size:clamp(2.1rem, 4.8vw, 3.5rem); margin-bottom:20px; }
+  .hero h1 em{ font-style:italic; color:var(--gold); }
+  .hero p{ font-size:1.08rem; color:rgba(255,253,248,0.9); max-width:540px; margin-bottom:32px; }
+  .btn-row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .btn{ display:inline-block; padding:14px 28px; border-radius:var(--radius); font-weight:800; font-size:0.94rem;
+        transition: transform .2s ease, box-shadow .2s ease; border:2px solid transparent; cursor:pointer; text-align:center; }
+  .btn-primary{ background:var(--gold); color:var(--ink); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(240,169,60,0.4); }
+  .btn-ghost{ background:transparent; border-color:rgba(255,253,248,0.55); color:var(--white); }
+  .btn-ghost:hover{ border-color:var(--white); }
+
+  @media (max-width:780px){
+    .hero{ min-height:100svh; }
+    .hero-content{ padding:100px 0 50px; }
+    .hero h1{ font-size:2rem; }
+    .btn-row{ flex-direction:column; }
+    .btn-row .btn{ width:100%; }
+    .hero-lights{ display:none; }
+  }
+
+  /* ---------- SECTION HELPERS ---------- */
+  section{ padding:100px 0; }
+  .section-head{ max-width:660px; margin:0 auto 44px; text-align:center; }
+  .eyebrow-dark{ font-size:0.76rem; font-weight:800; letter-spacing:0.16em; text-transform:uppercase; color:var(--green); margin-bottom:14px; display:block; }
+  .section-head h2{ font-size:clamp(1.7rem, 3.2vw, 2.5rem); }
+  .section-head p{ margin-top:16px; color:#43493F; font-size:1.03rem; }
+  @media (max-width:780px){ .container{ padding:0 20px; } section{ padding:56px 0; } }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .about-art{ border-radius:var(--radius); overflow:hidden; aspect-ratio:4/3; }
+  .about-art img{ width:100%; height:100%; object-fit:cover; }
+  .about-text p{ color:#33382F; margin-bottom:16px; }
+  .stat-row{ display:flex; gap:36px; margin-top:28px; flex-wrap:wrap; }
+  .stat b{ font-family:'Petrona', serif; font-size:1.9rem; display:block; color:var(--navy); }
+  .stat span{ font-size:0.8rem; color:#5A6054; }
+  @media (max-width:860px){ .about-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- STAY OPTIONS ---------- */
+  .stay{ background:var(--white); }
+  .room-card{ display:grid; grid-template-columns:1fr 1fr; gap:0; margin-bottom:28px; border:1px solid rgba(26,31,28,0.1); border-radius:var(--radius); overflow:hidden; background:var(--cream); }
+  .room-card.reverse .room-gallery{ order:2; }
+  .room-gallery{ display:grid; grid-template-columns:1fr 1fr; gap:2px; background:rgba(26,31,28,0.1); }
+  .room-gallery img{ width:100%; height:100%; object-fit:cover; aspect-ratio:1/1; }
+  .room-gallery.single{ grid-template-columns:1fr; }
+  .room-gallery.single img{ aspect-ratio:4/3; }
+  .room-info{ padding:32px 36px; display:flex; flex-direction:column; justify-content:center; }
+  .room-tag{ font-size:0.75rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:var(--green); margin-bottom:8px; display:block; }
+  .room-info h3{ font-size:1.4rem; margin-bottom:10px; }
+  .room-info p{ font-size:0.95rem; color:#43493F; margin-bottom:18px; }
+  .room-price{ display:flex; align-items:baseline; gap:8px; }
+  .room-price .amount{ font-family:'Petrona', serif; font-size:1.8rem; font-weight:600; color:var(--navy); }
+  .room-price .unit{ font-size:0.8rem; color:#6B7060; }
+  @media (max-width:860px){
+    .room-card, .room-card.reverse{ grid-template-columns:1fr; }
+    .room-card.reverse .room-gallery{ order:0; }
+    .room-info{ padding:26px 22px; }
+  }
+
+  /* ---------- GALLERY SLIDER ---------- */
+  .gallery{ background:var(--cream); }
+  .slider{ position:relative; width:100%; aspect-ratio:16/9; border-radius:var(--radius); overflow:hidden; box-shadow:0 24px 60px rgba(26,31,28,0.22); }
+  .slider-track{ position:relative; width:100%; height:100%; }
+  .slide{
+    position:absolute; inset:0; opacity:0;
+    transition: opacity 1.4s cubic-bezier(.4,0,.2,1);
+    pointer-events:none;
+  }
+  .slide.active{ opacity:1; z-index:2; pointer-events:auto; }
+  .slide::after{
+    content:''; position:absolute; inset:0; z-index:1;
+    background:linear-gradient(180deg, rgba(11,17,34,0.05) 0%, rgba(11,17,34,0.28) 100%);
+  }
+  .slide img{
+    width:100%; height:100%; object-fit:cover;
+    transform:scale(1.02); will-change:transform;
+  }
+  .slide.active img{ animation: kenburns 7s cubic-bezier(.25,.1,.25,1) forwards; }
+  @keyframes kenburns{
+    from{ transform:scale(1.02) translate(0,0); }
+    to{ transform:scale(1.13) translate(-1.2%, -1%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .slide.active img{ animation:none; transform:scale(1); }
+  }
+
+  .slider-dots{ display:flex; justify-content:center; gap:10px; margin-top:22px; }
+  .slider-dots button{
+    width:9px; height:9px; border-radius:50%; border:none; background:rgba(26,31,28,0.22);
+    cursor:pointer; padding:0; transition: width .4s cubic-bezier(.4,0,.2,1), background .3s ease, transform .2s ease;
+  }
+  .slider-dots button:hover{ transform:scale(1.25); background:rgba(27,42,74,0.5); }
+  .slider-dots button.active{ background:var(--navy); width:26px; border-radius:5px; }
+
+  .slider-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:5;
+    width:44px; height:44px; border-radius:50%; border:none; cursor:pointer;
+    background:rgba(255,253,248,0.82); backdrop-filter:blur(4px); color:var(--ink); font-size:1.2rem;
+    display:flex; align-items:center; justify-content:center;
+    transition: transform .25s cubic-bezier(.4,0,.2,1), background .25s ease, box-shadow .25s ease;
+    box-shadow:0 4px 14px rgba(26,31,28,0.15);
+  }
+  .slider-arrow:hover{ background:var(--white); transform:translateY(-50%) scale(1.12); box-shadow:0 8px 22px rgba(26,31,28,0.25); }
+  .slider-arrow:active{ transform:translateY(-50%) scale(0.95); }
+  .slider-arrow.prev{ left:16px; }
+  .slider-arrow.next{ right:16px; }
+  @media (max-width:600px){ .slider{ aspect-ratio:4/3; } }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{
+    opacity:0; transform:translateY(28px);
+    transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion: reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  /* ---------- ACTIVITIES ---------- */
+  .activities{ background:var(--cream); }
+  .activity-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:rgba(26,31,28,0.08); border:1px solid rgba(26,31,28,0.08); border-radius:var(--radius); overflow:hidden; }
+  .activity-card{ background:var(--white); padding:32px 26px; transition:background .25s ease; }
+  .activity-card:hover{ background:var(--cream); }
+  .activity-icon{ width:42px; height:42px; border-radius:50%; background:var(--navy); margin-bottom:18px; display:flex; align-items:center; justify-content:center; color:var(--white); font-family:'Petrona',serif; font-weight:700; }
+  .activity-card h3{ font-size:1.05rem; margin-bottom:8px; }
+  .activity-card p{ font-size:0.9rem; color:#54594F; }
+  @media (max-width:860px){ .activity-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .activity-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- EVENING ---------- */
+  .evening{ position:relative; background: linear-gradient(180deg, var(--navy) 0%, #0E1830 100%); color:var(--white); overflow:hidden; }
+  .evening-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .evening-art{ border-radius:var(--radius); overflow:hidden; aspect-ratio:1/1; }
+  .evening-art img{ width:100%; height:100%; object-fit:cover; }
+  .evening .eyebrow-dark{ color:var(--gold); }
+  .evening h2{ font-size:clamp(1.6rem,3vw,2.3rem); margin-bottom:16px; }
+  .evening p{ color:rgba(255,253,248,0.85); font-size:1.02rem; margin-bottom:16px; }
+  .evening-strip figure{ border-radius:var(--radius); overflow:hidden; aspect-ratio:21/9; }
+  .evening-strip img{ width:100%; height:100%; object-fit:cover; }
+  @media (max-width:860px){ .evening-grid{ grid-template-columns:1fr; } .evening-grid{ direction:ltr; } .evening-strip figure{ aspect-ratio:4/3; } }
+
+  /* ---------- FOOD ---------- */
+  .food{ background:var(--white); }
+  .food-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+  .food-box{ background:var(--cream); border-radius:var(--radius); padding:40px; }
+  .food-box h3{ font-size:1.4rem; margin-bottom:14px; }
+  .food-box p{ color:#43493F; margin-bottom:14px; }
+  .food-box ul{ list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .food-box li{ font-size:0.96rem; color:#33382F; padding-left:22px; position:relative; }
+  .food-box li::before{ content:'✦'; position:absolute; left:0; color:var(--gold); }
+  @media (max-width:860px){ .food-grid{ grid-template-columns:1fr; } }
+
+  /* ---------- DISCOUNT ---------- */
+  .discount{ background:var(--green); color:var(--white); }
+  .discount .container{ display:grid; grid-template-columns:1fr 1fr; gap:40px; align-items:center; }
+  .discount h2{ font-size:clamp(1.5rem,3vw,2.1rem); margin-bottom:14px; }
+  .discount p{ color:rgba(255,253,248,0.9); font-size:1rem; }
+  .discount-badge{ background:rgba(255,253,248,0.1); border:1px solid rgba(255,253,248,0.25); border-radius:var(--radius); padding:28px; text-align:center; }
+  .discount-badge b{ font-family:'Petrona', serif; font-size:2.6rem; color:var(--gold); display:block; }
+  .discount-badge span{ font-size:0.85rem; color:rgba(255,253,248,0.9); }
+  @media (max-width:760px){ .discount .container{ grid-template-columns:1fr; } }
+
+  /* ---------- CONTACT ---------- */
+  .contact{ background:var(--cream); }
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:60px; }
+  .contact-info dl{ margin-top:20px; }
+  .contact-info dt{ font-size:0.74rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--navy); font-weight:800; margin-top:18px; }
+  .contact-info dd{ font-size:1.02rem; margin-top:4px; }
+  .phone-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:6px; }
+  .phone-pill{ background:var(--white); border:1px solid rgba(26,31,28,0.12); border-radius:999px; padding:8px 16px; font-weight:700; font-size:0.92rem; }
+  .phone-pill.primary{ background:var(--gold); border-color:var(--gold); color:var(--ink); }
+  .contact-buttons{ display:flex; flex-direction:column; gap:12px; margin-top:24px; }
+  .contact-btn{ display:flex; align-items:center; gap:12px; padding:14px 18px; border-radius:var(--radius); border:1px solid rgba(26,31,28,0.15); font-weight:700; font-size:0.94rem; transition:.2s; background:var(--white); }
+  .contact-btn:hover{ border-color:var(--navy); }
+
+  form{ display:flex; flex-direction:column; gap:16px; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  label{ font-size:0.8rem; font-weight:800; margin-bottom:6px; display:block; }
+  input, textarea, select{ width:100%; padding:13px 14px; border-radius:var(--radius); border:1px solid rgba(26,31,28,0.2); background:var(--white); font-family:'Mulish', sans-serif; font-size:16px; }
+
+  /* ---------- ANIMATED STAY-TYPE SELECT ---------- */
+  .select-wrap{ position:relative; }
+  .select-wrap select{
+    appearance:none; -webkit-appearance:none;
+    padding-right:44px; cursor:pointer;
+    border:1px solid rgba(26,31,28,0.2);
+    transition: border-color .3s ease, box-shadow .3s ease, transform .15s ease;
+  }
+  .select-wrap select:hover{
+    border-color:var(--navy);
+    transform:translateY(-1px);
+  }
+  .select-wrap select:focus{
+    outline:none;
+    border-color:var(--gold);
+    box-shadow:0 0 0 4px rgba(240,169,60,0.25);
+    animation: select-glow 1.4s ease-out;
+  }
+  @keyframes select-glow{
+    0%{ box-shadow:0 0 0 0 rgba(240,169,60,0.55); }
+    100%{ box-shadow:0 0 0 4px rgba(240,169,60,0.25); }
+  }
+  .select-wrap::after{
+    content:''; position:absolute; right:16px; top:50%;
+    width:9px; height:9px;
+    border-right:2px solid var(--navy); border-bottom:2px solid var(--navy);
+    transform:translateY(-70%) rotate(45deg);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
+    pointer-events:none;
+  }
+  .select-wrap select:focus ~ .select-arrow-hint{ display:none; } /* reserved */
+
+  .price-badge{
+    display:inline-flex; align-items:baseline; gap:6px;
+    margin-top:12px; padding:8px 16px;
+    background:var(--cream); border:1px solid rgba(26,31,28,0.12); border-radius:999px;
+    font-family:'Petrona', serif; font-size:1rem; color:var(--navy); font-weight:600;
+    opacity:0; transform:translateY(4px) scale(0.96);
+  }
+  .price-badge.show{ animation: price-pop .5s cubic-bezier(.34,1.56,.64,1) forwards; }
+  @keyframes price-pop{
+    0%{ opacity:0; transform:translateY(4px) scale(0.9); }
+    60%{ opacity:1; transform:translateY(-2px) scale(1.04); }
+    100%{ opacity:1; transform:translateY(0) scale(1); }
+  }
+  textarea{ resize:vertical; min-height:100px; }
+  @media (max-width:860px){ .contact-grid{ grid-template-columns:1fr; } .field-row{ grid-template-columns:1fr; } }
+
+  /* ---------- OVERLAY ---------- */
+  #sendOverlay{ display:none; position:fixed; inset:0; z-index:1000; background:rgba(11,17,34,0.75); align-items:center; justify-content:center; padding:20px; }
+  #sendOverlay .box{ background:var(--white); border-radius:12px; padding:32px 24px; max-width:420px; width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background:var(--navy); color:rgba(255,253,248,0.75); padding:56px 0 28px; }
+  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:28px; padding-bottom:32px; border-bottom:1px solid rgba(255,253,248,0.14); }
+  .footer-brand{ font-family:'Petrona', serif; color:var(--white); font-size:1.2rem; margin-bottom:8px; }
+  .footer-links{ display:flex; gap:44px; flex-wrap:wrap; }
+  .footer-links h4{ font-size:0.74rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold); margin-bottom:12px; }
+  .footer-links ul{ list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.9rem; }
+  .footer-bottom{ display:flex; justify-content:space-between; padding-top:22px; font-size:0.8rem; flex-wrap:wrap; gap:12px; }
+  @media (max-width:600px){ .footer-top{ flex-direction:column; } .footer-bottom{ flex-direction:column; gap:6px; } }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="container">
+    <a class="brand" href="#top">
+      <span class="l1">Аглаг Зам</span>
+      <span class="l2">Гэр бүлийн амралт</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">Бидний тухай</a></li>
+      <li><a href="#stay">Байр & Гэр</a></li>
+      <li><a href="#activities">Тоглоом & Зугаа</a></li>
+      <li><a href="#gallery">Зургийн сан</a></li>
+      <li><a href="#food">Хоол</a></li>
+      <li><a href="#contact">Холбоо барих</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Цэс нээх" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-lights" aria-hidden="true">
+    <div class="light-strand">
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+      <span class="bulb"></span><span class="bulb"></span><span class="bulb"></span>
+      <span class="bulb"></span><span class="bulb"></span>
+    </div>
+  </div>
+  <div class="container hero-content">
+    <span class="eyebrow">Аглаг Бүтээлийн хийд рүү явах замд</span>
+    <h1>Гэр бүлээрээ <em>мартагдашгүй</em> дурсамж бүтээгээрэй</h1>
+    <p>Хотын төвөөс ердөө 42 км, Амьтны хүрээлэнгийн хойно байрлах дүплекс байр, монгол гэрүүд. Хүүхэд том хүн хамтдаа тайван, аюулгүй амрах орчин.</p>
+    <div class="btn-row">
+      <a href="#contact" class="btn btn-primary">Захиалга өгөх</a>
+      <a href="#stay" class="btn btn-ghost">Байрнууд харах</a>
+    </div>
+  </div>
+</header>
+
+<section class="about" id="about">
+  <div class="container about-grid">
+    <figure class="about-art">
+      <img src="day-view.jpg" alt="Өдрийн цагаар тоглоомын талбай, гэрүүд, уулс">
+    </figure>
+    <div class="about-text">
+      <span class="eyebrow-dark">Бидний тухай</span>
+      <h2>Цэвэр агаар, нам гүм орчинд амрах тав тухтай орон зай</h2>
+      <p>Хотын төвөөс 42 км зайд, Аглаг Бүтээлийн хийд рүү явах замд, Амьтны хүрээлэнгийн хойно байрладаг манай амралтын газар нь гэр бүл, хүүхдүүдтэйгээ амарч зугаалахад хамгийн тохиромжтой орчин юм.</p>
+      <p>45м² дүплекс байр болон уламжлалт монгол гэрүүд, нийт 25-30 хүнийг хүлээн авах хүчин чадалтай. Амьтны хүрээлэнгийн үзвэрт зочиддоо 20% хөнгөлөлт үзүүлдэг.</p>
+      <div class="stat-row">
+        <div class="stat"><b>42км</b><span>Хотын төвөөс</span></div>
+        <div class="stat"><b>25-30</b><span>Хүний багтаамж</span></div>
+        <div class="stat"><b>20%</b><span>Амьтны хүрээлэнгийн хөнгөлөлт</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stay" id="stay">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-dark">Байр & Гэр</span>
+      <h2>Хэрэгцээндээ тохирсон байрлалыг сонго</h2>
+      <p>Дүплекс байр эсвэл уламжлалт монгол гэр — аль нь ч танд тав тухтай амралтыг бэлдэнэ. Үнэ 1 хоногийн тарифаар.</p>
+    </div>
+
+    <div class="room-card">
+      <div class="room-gallery">
+        <img src="duplex-exterior.jpg" alt="Дүплекс шовгор байрны гадна үзэмж">
+        <img src="duplex-interior-1.jpg" alt="Дүплекс байрны том цонх, зочны булан">
+        <img src="duplex-interior-3.jpg" alt="Дүплекс байрны гал тогоо, ширээ">
+        <img src="duplex-interior-2.jpg" alt="Дүплекс байрны давхар, шат">
+      </div>
+      <div class="room-info">
+        <span class="room-tag">Дүплекс — Караокетай</span>
+        <h3>45м² шовгор дүплекс (Караокетай)</h3>
+        <p> 45 м² талбайтай, 2 давхар тохилог түплекс шовгор хаус нь 6–8 хүний багтаамжтай.
+Тохилог амрахад шаардлагатай бүх зүйл бүрэн бий:
+Бүрэн тоноглосон гал тогоо
+Дотор ариун цэврийн өрөө (00)
+Саруул, цэлгэр том цонх
+Караоке төхөөрөмж
+Гадна террас (суух талбай)
+Гэр бүл, найз нөхөд, хамт олноороо тав тухтай амарч, цагийг зугаатай өнгөрүүлэхэд төгс сонголт.</p>
+        <div class="room-price">
+          <span class="amount">350,000₮</span>
+          <span class="unit">/ хоног</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-card reverse">
+      <div class="room-gallery">
+        <img src="deck-view.jpg" alt="Дүплекс байрны тавцан, ширээ сандал">
+        <img src="duplex-interior-1.jpg" alt="Дүплекс байрны том цонх">
+      </div>
+      <div class="room-info">
+        <span class="room-tag">Дүплекс — Энгийн</span>
+        <h3>45м² шовгор дүплекс (Энгийн)</h3>
+        <p>Түплекс шовгор хаус энгийн
+
+45 м² талбайтай, 2 давхар тохилог түплекс шовгор хаус нь 6–8 хүний багтаамжтай.
+Тохилог амрахад шаардлагатай бүх зүйл бүрэн бий:
+Бүрэн тоноглосон гал тогоо
+Дотор ариун цэврийн өрөө (00)
+Саруул, цэлгэр том цонх
+Гадна террас (суух талбай)
+Гэр бүл, найз нөхөд, хамт олноороо тав тухтай амарч, цагийг зугаатай өнгөрүүлэхэд төгс сонголт..</p>
+        <div class="room-price">
+          <span class="amount">300,000₮</span>
+          <span class="unit">/ хоног</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-card">
+      <div class="room-gallery">
+        <img src="ger-ext-v2.jpg" alt="Монгол гэр гадна талаас, тоглоомтой">
+        <img src="ger-int-stove-v2.jpg" alt="Монгол гэрийн дотоод, зуух, ширээ">
+        <img src="ger-int-beds-v2.jpg" alt="Монгол гэрийн ор, дотоод тохижилт">
+        <img src="ger-field-v2.jpg" alt="Гэрүүд тал нутагт зэрэгцсэн харагдац">
+      </div>
+      <div class="room-info">
+        <span class="room-tag">Монгол гэр</span>
+        <h3>2–4 ортой тохилог гэр</h3>
+        <p>Гэр бүл, найз нөхөдтэйгөө тав тухтай амрахад зориулсан 4 ортой уламжлалт монгол гэрүүд таныг хүлээж байна.</p>
+        <div class="room-price">
+          <span class="amount">120,000₮</span>
+          <span class="unit">/ хоног</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="activities" id="activities">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-dark">Тоглоом & Зугаа</span>
+      <h2>Хүүхэд, том хүн хоёулаа хөгжилтэй цагийг өнгөрөөнө</h2>
+    </div>
+    <div class="activity-grid">
+      <div class="activity-card">
+        <div class="activity-icon">🐾</div>
+        <h3>Амьтны хүрээлэн</h3>
+        <p>Амьтдыг ойроос харж танин мэдэх боломж, үзвэрт 20% хөнгөлөлттэй.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🛝</div>
+        <h3>Хүүхдийн тоглоомын талбай</h3>
+        <p>Хүүхдүүд аюулгүй, чөлөөтэй тоглох тохилог талбай.</p>
+  
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🏀</div>
+        <h3>Сагсан бөмбөгийн талбай</h3>
+        <p>Найз нөхөд, гэр бүлээрээ тоглох спорт талбай.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🏐</div>
+        <h3>Элсэн волейбол</h3>
+        <p> элсэн волейболын талбай.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🎱</div>
+        <h3>Пүүл, билльярд</h3>
+        <p> тав тухтай тоглох боломж.</p>
+      </div>
+      <div class="activity-card">
+        <div class="activity-icon">🌳</div>
+        <h3>Беседка, сүүдрэвч</h3>
+        <p>Гэр бүлээрээ сууж амрах.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow-dark">Зургийн сан</span>
+      <h2>Манай орчныг зурган дээрээс үзээрэй</h2>
+    </div>
+    <div class="slider" id="slider">
+      <div class="slider-track" id="sliderTrack">
+        <div class="slide active"><img src="day-view.jpg" alt="Өдрийн цагаар тоглоомын талбай, гэрүүд, уулс"></div>
+        <div class="slide"><img src="ger-ext-v2.jpg" alt="Монгол гэр гадна талаас, тоглоомтой"></div>
+        <div class="slide"><img src="duplex-exterior.jpg" alt="Дүплекс шовгор байрны гадна үзэмж"></div>
+        <div class="slide"><img src="duplex-interior-1.jpg" alt="Дүплекс байрны том цонх"></div>
+        <div class="slide"><img src="ger-int-stove-v2.jpg" alt="Монгол гэрийн дотоод"></div>
+        <div class="slide"><img src="ger-int-beds-v2.jpg" alt="Монгол гэрийн ор"></div>
+        <div class="slide"><img src="pond-bridge-day.jpg" alt="Өдрийн цагаар гүүр, цөөрөм"></div>
+        <div class="slide"><img src="night-view.jpg" alt="Шөнийн цагаар гэрэлтсэн гүүр"></div>
+        <div class="slide"><img src="deck-view.jpg" alt="Тавцан дээрх ширээ сандал"></div>
+      </div>
+      <button class="slider-arrow prev" id="sliderPrev" aria-label="Өмнөх зураг">‹</button>
+      <button class="slider-arrow next" id="sliderNext" aria-label="Дараагийн зураг">›</button>
+    </div>
+    <div class="slider-dots" id="sliderDots"></div>
+  </div>
+</section>
+
+<section class="evening">
+  <div class="container evening-grid">
+    <div>
+      <span class="eyebrow-dark">Орой</span>
+      <h2>Гэрэлтсэн шөнө, тайван цөөрөм</h2>
+      <p></p>
+      <p></p>
+    </div>
+    <figure class="evening-art">
+      <img src="night-view.jpg" alt="Шөнийн цагаар гэрэлтсэн гүүр ба цөөрөм">
+    </figure>
+  </div>
+  <div class="container" style="margin-top:48px;">
+    <div class="evening-strip">
+      <figure><img src="pond-bridge-day.jpg" alt="Өдрийн цагаар гүүр, цөөрөм, тоглоомын талбай"></figure>
+    </div>
+  </div>
+</section>
+
+<section class="food" id="food">
+  <div class="container food-grid">
+    <div>
+      <span class="eyebrow-dark">Хоол</span>
+      <h2>Иж бүрэн гал тогоо, захиалгат монгол хоол</h2>
+      <p>Өөрийн хоолоо хийхийг хүсвэл иж бүрэн тоноглогдсон гал тогоо, эсвэл амарч байхдаа монгол хоол захиалах боломжтой.</p>
+    </div>
+    <div class="food-box">
+      <h3>Юу санал болгодог вэ</h3>
+      <ul>
+        <li>Иж бүрэн тоноглогдсон гал тогоо</li>
+        <li>Захиалгат монгол үндэсний хоол</li>
+        <li>Беседка, сүүдрэвч дор задгай агаарт хооллох боломж</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="discount" id="discount">
+  <div class="container">
+    <div>
+      <span class="eyebrow-dark" style="color:var(--gold);">Хөнгөлөлт</span>
+      <h2>Амьтны хүрээлэнгийн үзвэрт хөнгөлөлттэй</h2>
+      <p>Манай амралтын газарт буудалласан зочид ойролцоох Амьтны хүрээлэнгийн үзвэрт зориулсан тусгай хөнгөлөлт эдлэх боломжтой.</p>
+    </div>
+    <div class="discount-badge">
+      <b>20%</b>
+      <span>Амьтны хүрээлэнгийн үзвэрийн хөнгөлөлт</span>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="container contact-grid">
+    <div class="contact-info">
+      <span class="eyebrow-dark">Холбоо барих</span>
+      <h2>Захиалга өгөх, асуулт байвал холбогдоорой</h2>
+      <dl>
+        <dt>Байршил</dt>
+        <dd>Хотын төвөөс 42 км, Аглаг Бүтээлийн хийд рүү явах замд, Амьтны хүрээлэнгийн хойно</dd>
+        <dt>Утас</dt>
+        <dd>
+          <div class="phone-row">
+            <span class="phone-pill primary">99998466</span>
+            <span class="phone-pill">80057705</span>
+            <span class="phone-pill">96617705</span>
+          </div>
+        </dd>
+      </dl>
+      <div class="contact-buttons">
+        <a class="contact-btn" href="tel:99998466">📞 99998466 руу залгах</a>
+      </div>
+    </div>
+    <form id="bookingForm">
+      <div class="field-row">
+        <div>
+          <label for="name">Нэр</label>
+          <input id="name" name="name" type="text" placeholder="Таны нэр" required>
+        </div>
+        <div>
+          <label for="phone">Утасны дугаар</label>
+          <input id="phone" name="phone" type="tel" placeholder="99112233" required>
+        </div>
+      </div>
+      <div class="field-row">
+        <div>
+          <label for="date">Ирэх огноо</label>
+          <input id="date" name="date" type="date">
+        </div>
+        <div>
+          <label for="stayType">Байрны төрөл</label>
+          <div class="select-wrap">
+            <select id="stayType" name="stayType">
+              <option value="duplex-karaoke" data-price="350,000₮">Дүплекс (караокетай) — 350,000₮</option>
+              <option value="duplex-standard" data-price="300,000₮">Дүплекс (энгийн) — 300,000₮</option>
+              <option value="ger" data-price="120,000₮">Монгол гэр (2-4 хүн) — 120,000₮</option>
+            </select>
+          </div>
+          <span class="price-badge" id="priceBadge">💰 <span id="priceBadgeValue">350,000₮</span> / хоног</span>
+        </div>
+      </div>
+      <div>
+        <label for="message">Нэмэлт мэдээлэл</label>
+        <textarea id="message" name="message" placeholder="Хүний тоо, хүсэлт бичих"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="align-self:flex-start;">📩 Захиалга илгээх</button>
+    </form>
+
+    <div id="sendOverlay">
+      <div class="box">
+        <div style="font-size:3rem; margin-bottom:16px;">📱💬</div>
+        <h3 style="font-size:1.3rem; margin-bottom:14px;">Захиалгаа мессежээр илгээх</h3>
+        <p style="font-size:1.02rem; color:#43493F; margin-bottom:24px;">Мэдээлэл бэлэн боллоо. Доорх товчийг дарж мессежээ илгээнэ үү:</p>
+        <a id="smsLink" href="#" class="btn btn-primary" style="width:100%; display:block;">📩 99998466 руу илгээх</a>
+        <button id="sendOverlayClose" class="btn btn-ghost" style="width:100%; margin-top:14px; color:var(--ink); border-color:rgba(26,31,28,0.25);">Хаах</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">Аглаг Зам</div>
+        <p style="max-width:280px; font-size:0.9rem;">Гэр бүлийн амралт — Аглаг Бүтээлийн хийд рүү явах замд.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h4>Хуудас</h4>
+          <ul>
+            <li><a href="#about">Бидний тухай</a></li>
+            <li><a href="#stay">Байр & Гэр</a></li>
+            <li><a href="#contact">Холбоо барих</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Холбоо барих</h4>
+          <ul>
+            <li>99998466</li>
+            <li>80057705</li>
+            <li>96617705</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Аглаг Зам. Бүх эрх хуулиар хамгаалагдсан.</span>
+      <span>Монгол улс</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('open');
+    });
+  });
+
+  // ---------- Scroll reveal animations ----------
+  const revealSelectors = '.section-head, .room-card, .activity-card, .stat, .about-art, .about-text, .discount-badge, .evening-art, .food-box';
+  const revealEls = document.querySelectorAll(revealSelectors);
+  revealEls.forEach(el => el.classList.add('reveal'));
+
+  // Stagger cards within the same grid for a cascading effect
+  ['.activity-grid', '.stay .container'].forEach(sel => {
+    document.querySelectorAll(sel + ' > *').forEach((el, i) => {
+      if (el.classList.contains('reveal')) {
+        el.style.transitionDelay = `${Math.min(i * 90, 360)}ms`;
+      }
+    });
+  });
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  revealEls.forEach(el => revealObserver.observe(el));
+
+  // ---------- Count-up animation for stat numbers ----------
+  function animateStats() {
+    document.querySelectorAll('.stat b').forEach(el => {
+      const text = el.textContent.trim();
+      const match = text.match(/^(\d+)([^\d]*)$/);
+      if (!match) return; // skip ranges like "25-30"
+      const target = parseInt(match[1], 10);
+      const suffix = match[2];
+      const duration = 1200;
+      const startTime = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(target * eased) + suffix;
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target + suffix;
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+  const statRow = document.querySelector('.stat-row');
+  if (statRow) {
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStats();
+          statObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.4 });
+    statObserver.observe(statRow);
+  }
+
+  // ---------- Auto-sliding gallery carousel ----------
+  const slides = document.querySelectorAll('#sliderTrack .slide');
+  const dotsWrap = document.getElementById('sliderDots');
+  const prevBtn = document.getElementById('sliderPrev');
+  const nextBtn = document.getElementById('sliderNext');
+  let current = 0;
+  let autoTimer;
+  const AUTO_MS = 4500;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement('button');
+    if (i === 0) dot.classList.add('active');
+    dot.setAttribute('aria-label', `${i + 1}-р зураг руу очих`);
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+  });
+  const dots = dotsWrap.querySelectorAll('button');
+
+  function goTo(index) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = (index + slides.length) % slides.length;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+  function next() { goTo(current + 1); }
+  function prev() { goTo(current - 1); }
+  function startAuto() {
+    if (prefersReducedMotion) return;
+    stopAuto();
+    autoTimer = setInterval(next, AUTO_MS);
+  }
+  function stopAuto() { clearInterval(autoTimer); }
+
+  nextBtn.addEventListener('click', () => { next(); startAuto(); });
+  prevBtn.addEventListener('click', () => { prev(); startAuto(); });
+
+  const sliderEl = document.getElementById('slider');
+  sliderEl.addEventListener('mouseenter', stopAuto);
+  sliderEl.addEventListener('mouseleave', startAuto);
+
+  startAuto();
+
+  // ---------- Animated price badge on stay type change ----------
+  const staySelectEl = document.getElementById('stayType');
+  const priceBadge = document.getElementById('priceBadge');
+  const priceBadgeValue = document.getElementById('priceBadgeValue');
+
+  function updatePriceBadge() {
+    const opt = staySelectEl.options[staySelectEl.selectedIndex];
+    priceBadgeValue.textContent = opt.dataset.price || '';
+    priceBadge.classList.remove('show');
+    void priceBadge.offsetWidth; // restart animation
+    priceBadge.classList.add('show');
+  }
+  staySelectEl.addEventListener('change', updatePriceBadge);
+  updatePriceBadge();
+
+  const form = document.getElementById('bookingForm');
+  const sendOverlay = document.getElementById('sendOverlay');
+  const sendOverlayClose = document.getElementById('sendOverlayClose');
+  const smsLink = document.getElementById('smsLink');
+  const PHONE = '99998466';
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value || 'Зочин';
+    const phone = document.getElementById('phone').value || '-';
+    const date = document.getElementById('date').value || '-';
+    const staySelect = document.getElementById('stayType');
+    const stayType = staySelect.options[staySelect.selectedIndex].text;
+    const message = document.getElementById('message').value || '-';
+
+    const summary =
+      `Сайн байна уу, захиалга хийе.\n` +
+      `Нэр: ${name}\n` +
+      `Утас: ${phone}\n` +
+      `Ирэх огноо: ${date}\n` +
+      `Байрны төрөл: ${stayType}\n` +
+      `Нэмэлт: ${message}`;
+
+    smsLink.href = `sms:${PHONE}?&body=${encodeURIComponent(summary)}`;
+    sendOverlay.style.display = 'flex';
+  });
+
+  sendOverlayClose.addEventListener('click', () => {
+    sendOverlay.style.display = 'none';
+    form.reset();
+  });
+</script>
+
+</body>
+</html>
